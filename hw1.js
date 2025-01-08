@@ -1,12 +1,16 @@
-const inputName = document.querySelector(".add-form-name");
-const inputComment = document.querySelector(".add-form-text");
-const button = document.querySelector(".add-form-button");
+const inputName = document.getElementById("name");
+const inputComment = document.getElementById("comment");
+const button = document.getElementById("button");
 const list = document.getElementById("list");
 button.addEventListener('click', function () { 
     const newComment = document.createElement('li');
-    newComment.innerHTML = `${inputName.value}, ${inputComment.value}`;
+    newComment.innerHTML = `${inputName.value}, ${inputComment.value}, ${newDate().toLocaleString()}`;
+    inputName.value = "";
+    inputComment.value = "";
     list.appendChild(newComment);
-    console.log(newComment.innerHTML);
-    console.log(list.appendChild(newComment));
-    console.log(newComment.innerHTML = `${inputName.value}, ${inputComment.value}`);
+    if (inputName.value === "") {
+        alert("Поле ввода не должно быть пустым");
+      } else if (inputComment.value === "") {
+        alert("Поле ввода не должно быть пустым");
+    }
 });

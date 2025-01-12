@@ -30,6 +30,8 @@ button.addEventListener('click', function () {
   newComment.classList.add("likes-counter");
   newComment.classList.add("add-form");
   newComment.classList.add("height");
+  newComment.classList.add("like-new-button");
+
 
   inputName.value = "";
   inputComment.value = "";

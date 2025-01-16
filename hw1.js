@@ -1,41 +1,44 @@
-const inputName = document.getElementById("name");
-const inputComment = document.getElementById("text");
 const button = document.getElementById("button");
 const list = document.getElementById("list");
 
 button.addEventListener('click', function () {
 
-  inputName.classList.remove("error");
-  inputComment.classList.remove("error");
+  const title = document.querySelector("add-form-name");
+  const text = document.querySelector("add-form-text");
+ 
+  title.classList.remove("error");
+  text.classList.remove("error");
 
-  if (inputName.value === "") {
-    inputName.classList.add("error");
+  if (title.value === "") {
+    title.classList.add("error");
     return
-  } else if (inputComment.value === "") {
-    inputComment.classList.add("error");
+  } else if (text.value === "") {
+    text.classList.add("error");
     return
   }
-  
-  const newComment = document.createElement('li');
-  newComment.innerHTML = `${inputName.value}, ${inputComment.value}, ${new Date().toLocaleString()}`;
 
-  inputName.value = "";
-  inputComment.value = "";
-  list.appendChild(newComment);
+  const timeDate = new Date().toLocaleDateString();
 
-newComment.classList.add("comment");
-  newComment.classList.add("comment-header");
-  newComment.classList.add("comment-body");
-  newComment.classList.add("comment-footer");
-  newComment.classList.add("coments");
-  newComment.classList.add("comment-text");
-  newComment.classList.add("likes");
-  newComment.classList.add("likes-counter");
-  newComment.classList.add("add-form");
-  newComment.classList.add("height");
-  newComment.classList.add("like-button");
+  const oldHtml = list.innerHTML;
+  console.log(oldHtml);
+  list.innerHTML = oldHtml + `<li class="comment" id="comment">
+                <div class="comment-header">
+                    <div>${title}</div>
+                    <div>${timeDate}</div>
+                </div>
+                <div class="comment-body">
+                    <div class="comment-text">
+                        ${text}
+                    </div>
+                </div>
+                <div class="comment-footer">
+                    <div class="likes">
+                        <span class="likes-counter">0</span>
+                        <button class="like-button"></button>
+                    </div>
+                </div>
+            </li>`;
 
-  const renderHtml = list.innerHTML;
-  console.log(renderHtml);
-  list.innerHTML = renderHtml + `<li>${newComment.value}</li>`;
+            name.value = "";
+            text.value = "";
 });

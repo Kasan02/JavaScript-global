@@ -15,12 +15,15 @@ button.addEventListener('click', function () {
     inputComment.classList.add("error");
     return
   }
-
-
-
+  
   const newComment = document.createElement('li');
   newComment.innerHTML = `${inputName.value}, ${inputComment.value}, ${new Date().toLocaleString()}`;
-  newComment.classList.add("comment");
+
+  inputName.value = "";
+  inputComment.value = "";
+  list.appendChild(newComment);
+
+newComment.classList.add("comment");
   newComment.classList.add("comment-header");
   newComment.classList.add("comment-body");
   newComment.classList.add("comment-footer");
@@ -30,10 +33,9 @@ button.addEventListener('click', function () {
   newComment.classList.add("likes-counter");
   newComment.classList.add("add-form");
   newComment.classList.add("height");
-  newComment.classList.add("like-new-button");
+  newComment.classList.add("like-button");
 
-
-  inputName.value = "";
-  inputComment.value = "";
-  list.appendChild(newComment);
+  const renderHtml = list.innerHTML;
+  console.log(renderHtml);
+  list.innerHTML = renderHtml + `<li>${newComment.value}</li>`;
 });

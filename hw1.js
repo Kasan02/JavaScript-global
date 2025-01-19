@@ -20,13 +20,11 @@ button.addEventListener('click', function () {
         textStyle.placeholder = "Вы не ввели комментарий!"
         return;
     } else {
-        nameStyle.style.border = '';
-        nameStyle.style.borderColor = '';
+        nameStyle.classList.add('add-form-name');
         document.querySelector('.add-form-name').value = '';
         nameStyle.placeholder = "Введите ваше имя"
         textStyle.placeholder = "Введите ваш коментарий"
-        textStyle.style.border = '';
-        textStyle.style.borderColor = '';
+        textStyle.classList.add('add-form-text');
         document.querySelector('.add-form-text').value = '';
     }
         let dateTime = new Date();

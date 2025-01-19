@@ -53,4 +53,3 @@ button.addEventListener('click', function (id) {
     }
     renderComments()
 })};
-

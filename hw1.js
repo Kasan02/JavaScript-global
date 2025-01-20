@@ -1,3 +1,5 @@
+// HW 1
+
 const button = document.querySelector('.add-form-button');
 const ulEl = document.querySelector('.comments');
 const nameStyle = document.querySelector('.add-form-name');
@@ -55,4 +57,72 @@ button.addEventListener('click', function () {
                     </div>
                 </div>
             </li>`;
+});
+
+// HW 2
+
+const likeBtn = document.querySelector('.like-button');
+const activeLike = document.querySelector('.-active-like');
+
+const comments = [
+    {
+        id: 'Глеб Фокин',
+        date: '12.02.22 12:18',
+        text: "Это будет первый комментарий на этой странице",
+        likesCount: 3,
+        liked: false
+    },
+    {
+        id: 'Варвара Н.', 
+        date: '13.02.22 19:22',
+        text: "Мне нравится как оформлена эта страница! ❤",
+        likesCount: 75,
+        liked: false
+    }
+];
+
+function renderComments() {
+    const commentsContainer = document.querySelector('.comments');
+    commentsContainer.innerHTML = ''; 
+
+    comments.forEach((comment, index) => {
+        const commentElement = document.createElement('ul');
+        commentElement.className = 'comments';
+        commentElement.innerHTML = `
+             <li class="comment">
+             <div class="comment-header">
+             <div>${comment.id}</div>
+             <div>${comment.date}</div>
+            </div>
+            <div class="comment-body">
+                     <div class="comment-text">
+                     ${comment.text}
+                 </div>
+             </div>
+             <div class="comment-footer">
+                     <div class="likes">
+                         <span class="likes-counter">${comment.likesCount}</span>
+                         <button class="like-button ${comment.liked ? 'liked' : ''}" data-index="${index}">
+                          ${comment.liked ? activeLike : likeBtn} </button>
+                     </div>
+                 </div>
+             </li>`;
+        commentsContainer.appendChild(commentElement);
+    });
+}
+
+likeBtn.addEventListener('click', function(event) {
+    if (event.target.classList.contains('like-button')) {
+        const index = event.target.getAttribute('data-index'); 
+        const comment = comments[index];
+
+        comment.liked = !comment.liked; 
+        comment.likesCount += comment.liked ? 1 : -1; 
+
+        renderComments();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderComments();
 });

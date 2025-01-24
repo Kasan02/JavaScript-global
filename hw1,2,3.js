@@ -111,7 +111,7 @@ function renderComments() {
         commentElement.addEventListener('click', (event) => {
             if (!event.target.classList.contains('like-button')) {
                 event.stopPropagation(); 
-                document.querySelector('.add-form-text').value = `Ответ на > ${comments[index].id}, ${comments[index].text}:\n`;
+                document.querySelector('.add-form-text').value = `Ответ на > ${comments[index].id}, ${comments[index].text}:`;
                 document.querySelector('.add-form-name').scrollIntoView({
                     behavior: 'smooth',
                     block: 'start' 
@@ -136,6 +136,13 @@ ulEl.addEventListener('click', function (event) {
         likeButton.innerHTML = comment.liked ? '' : '';
         likeButton.classList.toggle('-active-like', comment.liked);
         likesCounter.textContent = comment.likesCount;
+    }
+});
+
+textStyle.addEventListener('input', function () {
+    if (textStyle.value === '') {
+        textStyle.placeholder = "Введите ваш комментарий";
+        textStyle.classList.add('add-form-text');
     }
 });
 

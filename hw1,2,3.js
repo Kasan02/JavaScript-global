@@ -139,13 +139,6 @@ ulEl.addEventListener('click', function (event) {
     }
 });
 
-textStyle.addEventListener('input', function () {
-    if (textStyle.value === '') {
-        textStyle.placeholder = "Введите ваш комментарий";
-        textStyle.classList.add('add-form-text');
-    }
-});
-
 document.addEventListener('DOMContentLoaded', function () {
     renderComments();
 });

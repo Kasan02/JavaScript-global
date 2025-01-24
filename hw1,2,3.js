@@ -112,6 +112,10 @@ function renderComments() {
             if (!event.target.classList.contains('like-button')) {
                 event.stopPropagation(); 
                 document.querySelector('.add-form-text').value = `Ответ на > ${comments[index].id}, ${comments[index].text}:\n`;
+                document.querySelector('.add-form-name').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start' 
+                });
             }
         });
     });
@@ -126,7 +130,12 @@ ulEl.addEventListener('click', function (event) {
         comment.liked = !comment.liked;
         comment.likesCount += comment.liked ? 1 : -1;
 
-        renderComments();
+        const likeButton = event.target;
+        const likesCounter = likeButton.previousElementSibling;
+
+        likeButton.innerHTML = comment.liked ? '' : '';
+        likeButton.classList.toggle('-active-like', comment.liked);
+        likesCounter.textContent = comment.likesCount;
     }
 });
 

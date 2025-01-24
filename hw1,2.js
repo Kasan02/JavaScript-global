@@ -20,6 +20,15 @@ const ulEl = document.querySelector('.comments');
 const nameStyle = document.querySelector('.add-form-name');
 const textStyle = document.querySelector('.add-form-text');
 
+function escapeHtml(unsafe) {
+    return unsafe
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
 button.addEventListener('click', function () {
     const name = document.querySelector('.add-form-name').value;
     const text = document.querySelector('.add-form-text').value;
@@ -54,10 +63,13 @@ button.addEventListener('click', function () {
         minute: '2-digit'
     });
 
+    const safeName = escapeHtml(name);
+    const safeText = escapeHtml(text);
+
     const newComment = {
-        id: name,
+        id: safeName,
         date: dateTime,
-        text: text,
+        text: safeText,
         likesCount: 0,
         liked: false
     };
@@ -93,10 +105,22 @@ function renderComments() {
                 `;
         ulEl.appendChild(commentElement);
     });
-}
+
+    const commentElements = document.querySelectorAll('.comment');
+    commentElements.forEach((commentElement, index) => {
+        commentElement.addEventListener('click', (event) => {
+            if (!event.target.classList.contains('like-button')) {
+                event.stopPropagation(); 
+                document.querySelector('.add-form-name').value = comments[index].id;
+                document.querySelector('.add-form-text').value = `Ответ на: ${comments[index].text}\n`;
+            }
+        });
+    });
+};
 
 ulEl.addEventListener('click', function (event) {
     if (event.target.classList.contains('like-button')) {
+        event.stopPropagation();
         const index = event.target.getAttribute('data-index');
         const comment = comments[index];
 

@@ -111,8 +111,7 @@ function renderComments() {
         commentElement.addEventListener('click', (event) => {
             if (!event.target.classList.contains('like-button')) {
                 event.stopPropagation(); 
-                document.querySelector('.add-form-name').value = comments[index].id;
-                document.querySelector('.add-form-text').value = `Ответ на: ${comments[index].text}\n`;
+                document.querySelector('.add-form-text').value = `Ответ на > ${comments[index].id}, ${comments[index].text}:\n`;
             }
         });
     });

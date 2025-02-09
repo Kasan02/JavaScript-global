@@ -1,23 +1,22 @@
 import { comments } from "./comments.js";
-import { button } from "./variables.js";
-import { ulEl } from "./variables.js";
-import { nameStyle } from "./variables.js";
-import { textStyle } from "./variables.js";
-import { escapeHtml } from "./escapeHtml.js";
+import { button, ulEl, nameStyle, textStyle } from './variables.js';
+import { escapeHtml } from './escapeHtml.js';
+import { addButtonListener } from './buttonValue.js'; 
+import { renderComments } from './renderComments.js';
+import { addLikeButtonListener } from './btnLike.js';  
+import { onDOMContentLoaded } from './document.js';  
+
+addButtonListener(button, nameStyle, textStyle, comments, renderComments);
+
+renderComments();  
+
+addLikeButtonListener(ulEl, comments);
+
+onDOMContentLoaded(renderComments);
+
+escapeHtml('<div>Это "небезопасный" текст &</div>');
 
 
-
-
-comments.comments;
-button.variables;
-ulEl.variables;
-nameStyle.variables;
-textStyle.variables;
-
-const unsafeText = '<script>alert("XSS")</script>';
-const safeText = escapeHtml(unsafeText);
-
-console.log(safeText);
 
 
 

@@ -1,28 +1,14 @@
-import { comments } from "./comments.js";
-import { button, ulEl, nameStyle, textStyle } from './variables.js';
-import { escapeHtml } from './escapeHtml.js';
-import { addButtonListener } from './buttonValue.js'; 
-import { renderComments } from './renderComments.js';
-import { addLikeButtonListener } from './btnLike.js';  
-import { onDOMContentLoaded } from './document.js';  
+import { addButtonComment } from './buttonValue.js';
+import { renderComments, addLikeButton } from './renderComments.js';
+import { addCommentClick } from './quotingComment.js';
+import { onDOMContentLoaded } from './document.js';
 
-addButtonListener(button, nameStyle, textStyle, comments, renderComments);
+addButtonComment();
 
-renderComments();  
+renderComments();
 
-addLikeButtonListener(ulEl, comments);
+addLikeButton();
+
+addCommentClick();
 
 onDOMContentLoaded(renderComments);
-
-escapeHtml('<div>Это "небезопасный" текст &</div>');
-
-
-
-
-
-
-
-
-
-
-

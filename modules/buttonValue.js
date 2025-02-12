@@ -1,56 +1,62 @@
 import { escapeHtml } from './escapeHtml.js';
-import { button, nameStyle, textStyle } from './variables.js';
 import { comments } from './comments.js';
-import { renderComments } from './renderComments.js';
+import { renderComments, addLikeButton } from './renderComments.js';
+import { addCommentClick } from './quotingComment.js';
 
-export function addButtonComment() {
-    button.addEventListener('click', function () {
-        const name = document.querySelector('.add-form-name').value;
-        const text = document.querySelector('.add-form-text').value;
+export function addButtonListener() {
+  const button = document.querySelector('.add-form-button');
+  const nameElement = document.querySelector('.add-form-name');
+  const textElement = document.querySelector('.add-form-text');
+  if (!button || !nameElement || !textElement) return;
 
-        nameStyle.classList.remove('error');
-        textStyle.classList.remove('error');
+  button.addEventListener('click', function () {
+    const name = nameElement.value;
+    const text = textElement.value;
 
-        if (name.trim() === '') {
-            nameStyle.classList.add('error');
-            nameStyle.placeholder = "Вы не ввели имя!";
-            return;
-        }
-        if (text.trim() === '') {
-            textStyle.classList.add('error');
-            textStyle.placeholder = "Вы не ввели комментарий!";
-            return;
-        }
+    nameElement.classList.remove('error');
+    textElement.classList.remove('error');
 
-        nameStyle.classList.add('add-form-name');
-        document.querySelector('.add-form-name').value = '';
-        nameStyle.placeholder = "Введите ваше имя";
-        textStyle.placeholder = "Введите ваш комментарий";
-        textStyle.classList.add('add-form-text');
-        document.querySelector('.add-form-text').value = '';
+    if (name.trim() === '') {
+      nameElement.classList.add('error');
+      nameElement.placeholder = "Вы не ввели имя!";
+      return;
+    }
+    if (text.trim() === '') {
+      textElement.classList.add('error');
+      textElement.placeholder = "Вы не ввели комментарий!";
+      return;
+    }
 
-        let dateTime = new Date();
-        dateTime = dateTime.toLocaleDateString('ru-RU', {
-            year: '2-digit',
-            month: '2-digit',
-            day: '2-digit'
-        }) + ' ' + dateTime.toLocaleTimeString('ru-RU', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+    nameElement.value = '';
+    nameElement.placeholder = "Введите ваше имя";
+    textElement.value = '';
+    textElement.placeholder = "Введите ваш комментарий";
 
-        const safeName = escapeHtml(name);
-        const safeText = escapeHtml(text);
-
-        const newComment = {
-            id: safeName,
-            date: dateTime,
-            text: safeText,
-            likesCount: 0,
-            liked: false
-        };
-
-        comments.push(newComment);
-        renderComments();
+    let dateTime = new Date();
+    dateTime = dateTime.toLocaleDateString('ru-RU', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit'
+    }) + ' ' + dateTime.toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit'
     });
+
+    const safeName = escapeHtml(name);
+    const safeText = escapeHtml(text);
+
+    const newComment = {
+      id: safeName,
+      date: dateTime,
+      text: safeText,
+      likesCount: 0,
+      liked: false
+    };
+
+    comments.push(newComment);
+
+    renderComments();
+    addLikeButton();
+    addCommentClick();
+  });
 }

@@ -1,49 +1,68 @@
-import { ulEl } from "./variables.js";
 import { comments } from "./comments.js";
 
 export function renderComments() {
-    ulEl.innerHTML = '';
+  const ulEl = document.querySelector('.comments');
+  if (!ulEl) return; 
 
-    comments.forEach((comment, index) => {
-        const commentElement = document.createElement('li');
-        commentElement.className = 'comment';
-        commentElement.dataset.index = index;
-        commentElement.innerHTML = `
-            <div class="comment-header">
-                <div>${comment.id}</div>
-                <div>${comment.date}</div>
-            </div>
-            <div class="comment-body">
-                <div class="comment-text">
-                    ${comment.text}
-                </div>
-            </div>
-            <div class="comment-footer">
-                <div class="likes">
-                    <span class="likes-counter">${comment.likesCount}</span>
-                    <button class="like-button ${comment.liked ? '-active-like' : ''}" data-index="${index}"></button>
-                </div>
-            </div>
-        `;
-        ulEl.appendChild(commentElement);
+  ulEl.innerHTML = ''; 
+
+  comments.forEach((comment, index) => {
+    const commentElement = document.createElement('li');
+    commentElement.className = 'comment';
+    commentElement.dataset.index = index; 
+
+    commentElement.innerHTML = `
+      <div class="comment-header">
+        <div>${comment.id}</div>
+        <div>${comment.date}</div>
+      </div>
+      <div class="comment-body">
+        <div class="comment-text">
+          ${comment.text}
+        </div>
+      </div>
+      <div class="comment-footer">
+        <div class="likes">
+          <span class="likes-counter">${comment.likesCount}</span>
+          <button class="like-button ${comment.liked ? '-active-like' : ''}" data-index="${index}"></button>
+        </div>
+      </div>
+    `;
+    ulEl.appendChild(commentElement);
+
+    commentElement.addEventListener('click', function (event) {
+      if (!event.target.classList.contains('like-button')) {
+        event.stopPropagation();
+        const addFormText = document.querySelector('.add-form-text');
+        const addFormName = document.querySelector('.add-form-name');
+        if (addFormText) {
+          addFormText.value = `Ответ на > ${comment.id}, ${comment.text}:`;
+        }
+        if (addFormName) {
+          addFormName.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
     });
+  });
 }
 
 export function addLikeButton() {
-    ulEl.addEventListener('click', function (event) {
-        if (event.target.classList.contains('like-button')) {
-            event.stopPropagation();
-            const index = event.target.getAttribute('data-index');
-            const comment = comments[index];
+  const likeButtons = document.querySelectorAll('.like-button');
+  likeButtons.forEach((btn) => {
+    btn.addEventListener('click', function (event) {
+      event.stopPropagation(); 
+      const index = btn.getAttribute('data-index');
+      const comment = comments[index];
+      if (!comment) return;
 
-            comment.liked = !comment.liked;
-            comment.likesCount += comment.liked ? 1 : -1;
+      comment.liked = !comment.liked;
+      comment.likesCount += comment.liked ? 1 : -1;
 
-            const likeButton = event.target;
-            const likesCounter = likeButton.previousElementSibling;
-
-            likeButton.classList.toggle('-active-like', comment.liked);
-            likesCounter.textContent = comment.likesCount;
-        }
+      btn.classList.toggle('-active-like', comment.liked);
+      const likesCounter = btn.parentElement.querySelector('.likes-counter');
+      if (likesCounter) {
+        likesCounter.textContent = comment.likesCount;
+      }
     });
+  });
 }

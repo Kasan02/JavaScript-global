@@ -1,5 +1,7 @@
 import { comments } from "./comments.js";
 
+const commentElement = document.createElement('li');
+
 export function renderComments() {
   const ulEl = document.querySelector('.comments');
   if (!ulEl) return; 
@@ -29,21 +31,24 @@ export function renderComments() {
       </div>
     `;
     ulEl.appendChild(commentElement);
-
-    commentElement.addEventListener('click', function (event) {
-      if (!event.target.classList.contains('like-button')) {
-        event.stopPropagation();
-        const addFormText = document.querySelector('.add-form-text');
-        const addFormName = document.querySelector('.add-form-name');
-        if (addFormText) {
-          addFormText.value = `Ответ на > ${comment.id}, ${comment.text}:`;
-        }
-        if (addFormName) {
-          addFormName.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }
-    });
+    addComment();
   });
+}
+
+export function addComment() {
+  commentElement.addEventListener('click', function (event) {
+    if (!event.target.classList.contains('like-button')) {
+      event.stopPropagation();
+      const addFormText = document.querySelector('.add-form-text');
+      const addFormName = document.querySelector('.add-form-name');
+      if (addFormText) {
+        addFormText.value = `Ответ на > ${comment.id}, ${comment.text}:`;
+      }
+      if (addFormName) {
+        addFormName.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  })
 }
 
 export function addLikeButton() {

@@ -8,7 +8,5 @@ addButtonListener();
 
 onDOMContentLoaded(() => {
 renderComments();
-addComment();  
-addLikeButton();
 addCommentClick();
 });

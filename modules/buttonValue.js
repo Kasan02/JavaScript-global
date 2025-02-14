@@ -1,7 +1,6 @@
 import { escapeHtml } from './escapeHtml.js';
 import { comments } from './comments.js';
-import { renderComments, addLikeButton } from './renderComments.js';
-import { addCommentClick } from './quotingComment.js';
+import { renderComments } from './renderComments.js';
 
 export function addButtonListener() {
   const button = document.querySelector('.add-form-button');
@@ -56,7 +55,5 @@ export function addButtonListener() {
     comments.push(newComment);
 
     renderComments();
-    addLikeButton();
-    addCommentClick();
   });
 }

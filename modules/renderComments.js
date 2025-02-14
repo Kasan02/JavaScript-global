@@ -1,18 +1,16 @@
 import { comments } from "./comments.js";
-import { addComment } from "./quotingComment.js";
-import { addLikeButton } from "./quotingComment.js";
+import { initLikeHandler, addComment } from "./handlers.js";
 
 export function renderComments() {
   const ulEl = document.querySelector('.comments');
-  if (!ulEl) return; 
-
-  ulEl.innerHTML = ''; 
+  if (!ulEl) return;
+  
+  ulEl.innerHTML = '';
 
   comments.forEach((comment, index) => {
     const commentElement = document.createElement('li');
     commentElement.className = 'comment';
-    commentElement.dataset.index = index; 
-
+    commentElement.dataset.index = index;
     commentElement.innerHTML = `
       <div class="comment-header">
         <div>${comment.id}</div>
@@ -31,7 +29,8 @@ export function renderComments() {
       </div>
     `;
     ulEl.appendChild(commentElement);
-    addComment();  
-    addLikeButton();
   });
+
+  initLikeHandler();
+  addComment();
 }

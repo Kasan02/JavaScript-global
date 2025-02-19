@@ -1,5 +1,5 @@
 import { comments } from "./comments.js";
-import { initLikeHandler, addComment } from "./handlers.js";
+import { initLikesListeners, initReplyCommentListeners } from "./addListeners.js";
 
 export function renderComments() {
   const ulEl = document.querySelector('.comments');
@@ -31,6 +31,6 @@ export function renderComments() {
     ulEl.appendChild(commentElement);
   });
 
-  initLikeHandler();
-  addComment();
+  initLikesListeners();
+  initReplyCommentListeners();
 }

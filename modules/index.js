@@ -1,9 +1,6 @@
-import { addButtonListener } from './buttonValue.js';
+import { initAddCommentListener } from './addListeners.js';
 import { renderComments } from './renderComments.js';
-import { onDOMContentLoaded } from './document.js';
 
-addButtonListener();
+initAddCommentListener();
 
-onDOMContentLoaded(() => {
   renderComments();
-});

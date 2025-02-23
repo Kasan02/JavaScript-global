@@ -1,6 +1,7 @@
 import { comments } from "./comments.js";
 import { escapeHtml } from './escapeHtml.js';
 import { renderComments } from './renderComments.js';
+import { updateComments } from "./comments.js";
 
 export function initAddCommentListener() {
   const button = document.querySelector('.add-form-button');
@@ -31,28 +32,40 @@ export function initAddCommentListener() {
     textElement.value = '';
     textElement.placeholder = "Введите ваш комментарий";
 
-    let dateTime = new Date();
-    dateTime = dateTime.toLocaleDateString('ru-RU', {
-      year: '2-digit',
-      month: '2-digit',
-      day: '2-digit'
+    const dateStr = "2025-02-23T11:30:02.442Z";
+const dateTime = new Date(dateStr);
+const formattedDate = dateTime.toLocaleString('ru-RU', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
     }) + ' ' + dateTime.toLocaleTimeString('ru-RU', {
       hour: '2-digit',
       minute: '2-digit'
-    });
+    })
+    console.log(formattedDate); // "23.02.2025, 14:30"
 
     const safeName = escapeHtml(name);
     const safeText = escapeHtml(text);
 
     const newComment = {
-      id: safeName,
       date: dateTime,
       text: safeText,
-      likesCount: 0,
-      liked: false
+      likes: 0,
+      isLiked: false,
+      name: safeName
     };
 
-    comments.push(newComment);
+    fetch("https://wedev-api.sky.pro/api/v1/daniil-kasanov/comments", {
+      method: 'POST',
+      body: JSON.stringify(newComment), 
+    }).then(response => {
+      return response.json()
+    }).then(data => {
+      updateComments(data.comments);
+        renderComments();
+    });
+
+    // comments.push(newComment);
 
     renderComments();
   });
@@ -99,13 +112,13 @@ function likeHandler(event) {
     const comment = comments[index];
     if (!comment) return;
     
-    comment.liked = !comment.liked;
-    comment.likesCount += comment.liked ? 1 : -1;
+    comment.isLiked = !comment.isLiked;
+    comment.likes += comment.isLiked ? 1 : -1;
     
-    event.target.classList.toggle('-active-like', comment.liked);
+    event.target.classList.toggle('-active-like', comment.isLiked);
     const likesCounter = event.target.parentElement.querySelector('.likes-counter');
     if (likesCounter) {
-      likesCounter.textContent = comment.likesCount;
+      likesCounter.textContent = comment.likes;
     }
   }
 }

@@ -13,7 +13,7 @@ export function renderComments() {
     commentElement.dataset.index = index;
     commentElement.innerHTML = `
       <div class="comment-header">
-        <div>${comment.id}</div>
+        <div>${comment.name}</div>
         <div>${comment.date}</div>
       </div>
       <div class="comment-body">
@@ -23,8 +23,8 @@ export function renderComments() {
       </div>
       <div class="comment-footer">
         <div class="likes">
-          <span class="likes-counter">${comment.likesCount}</span>
-          <button class="like-button ${comment.liked ? '-active-like' : ''}" data-index="${index}"></button>
+          <span class="likes-counter">${comment.likes}</span>
+          <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}"></button>
         </div>
       </div>
     `;

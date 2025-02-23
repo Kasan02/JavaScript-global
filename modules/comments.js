@@ -1,6 +1,7 @@
 export let comments = [];
-export let updateComments = (newComment) => {
-    comments = newComment;
-}
 
+export function updateComments(newComments) {
+    comments.splice(0, comments.length, ...newComments);
+}
   
+

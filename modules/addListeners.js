@@ -42,12 +42,12 @@ const formattedDate = dateTime.toLocaleString('ru-RU', {
       hour: '2-digit',
       minute: '2-digit'
     })
-    console.log(formattedDate); // "23.02.2025, 14:30"
+    console.log(formattedDate); 
 
     const safeName = escapeHtml(name);
     const safeText = escapeHtml(text);
 
-    const newComment = {
+    const newComments = {
       date: dateTime,
       text: safeText,
       likes: 0,
@@ -57,7 +57,7 @@ const formattedDate = dateTime.toLocaleString('ru-RU', {
 
     fetch("https://wedev-api.sky.pro/api/v1/daniil-kasanov/comments", {
       method: 'POST',
-      body: JSON.stringify(newComment), 
+      body: JSON.stringify(newComments), 
     }).then(response => {
       return response.json()
     }).then(data => {

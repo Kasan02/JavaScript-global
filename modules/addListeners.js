@@ -1,7 +1,8 @@
 import { comments } from "./comments.js";
 import { escapeHtml } from './escapeHtml.js';
 import { renderComments } from './renderComments.js';
-import { updateComments } from "./comments.js";
+// import { updateComments } from "./comments.js";
+import { postComment } from "./api.js";
 
 export function initAddCommentListener() {
   const button = document.querySelector('.add-form-button');
@@ -32,44 +33,13 @@ export function initAddCommentListener() {
     textElement.value = '';
     textElement.placeholder = "Введите ваш комментарий";
 
-    const dateStr = "2025-02-23T11:30:02.442Z";
-const dateTime = new Date(dateStr);
-const formattedDate = dateTime.toLocaleString('ru-RU', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-    }) + ' ' + dateTime.toLocaleTimeString('ru-RU', {
-      hour: '2-digit',
-      minute: '2-digit'
+    postComment(escapeHtml(text.value), escapeHtml(name.value)).then(() => {
+      renderComments();
+      name.value = ''
+      text.value = ''
     })
-    console.log(formattedDate); 
-
-    const safeName = escapeHtml(name);
-    const safeText = escapeHtml(text);
-
-    const newComments = {
-      date: dateTime,
-      text: safeText,
-      likes: 0,
-      isLiked: false,
-      name: safeName
-    };
-
-    fetch("https://wedev-api.sky.pro/api/v1/daniil-kasanov/comments", {
-      method: 'POST',
-      body: JSON.stringify(newComments), 
-    }).then(response => {
-      return response.json()
-    }).then(data => {
-      updateComments(data.comments);
-        renderComments();
-    });
-
-    // comments.push(newComment);
-
-    renderComments();
-  });
-}
+});
+};
 
 export function initReplyCommentListeners() {
   const commentElements = document.querySelectorAll('.comment');

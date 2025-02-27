@@ -9,6 +9,7 @@ export const fetchComments = () => {
     .then((responseData) => {
         const appComments = responseData.comments.map((comment => {
             return {
+                id: comment.author.name,
                 name: comment.author.name,
                 text: comment.text,
                 date: new Date(comment.date),
@@ -25,14 +26,14 @@ export const postComment = (text, name) => {
         method: "POST",
         body: JSON.stringify({
             text: text,
-            name: name, // сервер требует name, а не author.name
+            name: name, 
         }),
     })
     .then(response => {
         if (!response.ok) {
             return response.json().then(err => Promise.reject(err));
         }
-        return fetchComments(); // Загружаем обновленный список комментариев
+        return fetchComments(); 
     })
     .catch(error => {
         console.error("Ошибка при отправке комментария:", error);

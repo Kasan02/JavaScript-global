@@ -145,3 +145,8 @@ body {
   .error {
     background-color: #ff0000;
   }
+
+.form-loading {
+  display:none;
+  margin-top: 20px
+}

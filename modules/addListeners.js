@@ -1,7 +1,7 @@
 import { comments } from "./comments.js";
 import { escapeHtml } from './escapeHtml.js';
 import { renderComments } from './renderComments.js';
-// import { updateComments } from "./comments.js";
+import { updateComments } from "./comments.js";
 import { postComment } from "./api.js";
 
 export function initAddCommentListener() {
@@ -11,35 +11,35 @@ export function initAddCommentListener() {
   if (!button || !nameElement || !textElement) return;
 
   button.addEventListener('click', function () {
-    const name = nameElement.value;
-    const text = textElement.value;
+    const name = nameElement.value.trim();
+    const text = textElement.value.trim();
 
     nameElement.classList.remove('error');
     textElement.classList.remove('error');
 
-    if (name.trim() === '') {
-      nameElement.classList.add('error');
-      nameElement.placeholder = "Вы не ввели имя!";
-      return;
+    if (!name) {
+        nameElement.classList.add('error');
+        nameElement.placeholder = "Вы не ввели имя!";
+        return;
     }
-    if (text.trim() === '') {
-      textElement.classList.add('error');
-      textElement.placeholder = "Вы не ввели комментарий!";
-      return;
+    if (!text) {
+        textElement.classList.add('error');
+        textElement.placeholder = "Вы не ввели комментарий!";
+        return;
     }
 
-    nameElement.value = '';
-    nameElement.placeholder = "Введите ваше имя";
-    textElement.value = '';
-    textElement.placeholder = "Введите ваш комментарий";
-
-    postComment(escapeHtml(text.value), escapeHtml(name.value)).then(() => {
-      renderComments();
-      name.value = ''
-      text.value = ''
+    postComment(escapeHtml(text), escapeHtml(name))
+        .then((data) => {
+          updateComments(data);
+            renderComments();
+            nameElement.value = '';  
+            textElement.value = '';  
+        })
+        .catch(err => {
+            console.error("Ошибка при отправке комментария:", err);
     })
-});
-};
+  })
+}
 
 export function initReplyCommentListeners() {
   const commentElements = document.querySelectorAll('.comment');

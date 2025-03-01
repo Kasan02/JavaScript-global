@@ -39,5 +39,3 @@ export const postComment = (text, name) => {
         console.error("Ошибка при отправке комментария:", error);
     });
 };
-
-

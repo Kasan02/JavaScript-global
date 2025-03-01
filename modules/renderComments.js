@@ -8,13 +8,22 @@ export function renderComments() {
   ulEl.innerHTML = '';
 
   comments.forEach((comment, index) => {
+    const formattedDate = new Date(comment.date).toLocaleString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+
     const commentElement = document.createElement('li');
     commentElement.className = 'comment';
     commentElement.dataset.index = index;
     commentElement.innerHTML = `
       <div class="comment-header">
-        <div>${comment.id}</div>
-        <div>${comment.date}</div>
+        <div>${comment.name}</div>
+        <div>${formattedDate}</div>
       </div>
       <div class="comment-body">
         <div class="comment-text">
@@ -23,8 +32,8 @@ export function renderComments() {
       </div>
       <div class="comment-footer">
         <div class="likes">
-          <span class="likes-counter">${comment.likesCount}</span>
-          <button class="like-button ${comment.liked ? '-active-like' : ''}" data-index="${index}"></button>
+          <span class="likes-counter">${comment.likes}</span>
+          <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}"></button>
         </div>
       </div>
     `;

@@ -1,6 +1,8 @@
 import { comments } from "./comments.js";
 import { escapeHtml } from './escapeHtml.js';
 import { renderComments } from './renderComments.js';
+import { updateComments } from "./comments.js";
+import { postComment } from "./api.js";
 
 export function initAddCommentListener() {
   const button = document.querySelector('.add-form-button');
@@ -9,53 +11,34 @@ export function initAddCommentListener() {
   if (!button || !nameElement || !textElement) return;
 
   button.addEventListener('click', function () {
-    const name = nameElement.value;
-    const text = textElement.value;
+    const name = nameElement.value.trim();
+    const text = textElement.value.trim();
 
     nameElement.classList.remove('error');
     textElement.classList.remove('error');
 
-    if (name.trim() === '') {
-      nameElement.classList.add('error');
-      nameElement.placeholder = "Вы не ввели имя!";
-      return;
+    if (!name) {
+        nameElement.classList.add('error');
+        nameElement.placeholder = "Вы не ввели имя!";
+        return;
     }
-    if (text.trim() === '') {
-      textElement.classList.add('error');
-      textElement.placeholder = "Вы не ввели комментарий!";
-      return;
+    if (!text) {
+        textElement.classList.add('error');
+        textElement.placeholder = "Вы не ввели комментарий!";
+        return;
     }
 
-    nameElement.value = '';
-    nameElement.placeholder = "Введите ваше имя";
-    textElement.value = '';
-    textElement.placeholder = "Введите ваш комментарий";
-
-    let dateTime = new Date();
-    dateTime = dateTime.toLocaleDateString('ru-RU', {
-      year: '2-digit',
-      month: '2-digit',
-      day: '2-digit'
-    }) + ' ' + dateTime.toLocaleTimeString('ru-RU', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-
-    const safeName = escapeHtml(name);
-    const safeText = escapeHtml(text);
-
-    const newComment = {
-      id: safeName,
-      date: dateTime,
-      text: safeText,
-      likesCount: 0,
-      liked: false
-    };
-
-    comments.push(newComment);
-
-    renderComments();
-  });
+    postComment(escapeHtml(text), escapeHtml(name))
+        .then((data) => {
+          updateComments(data);
+            renderComments();
+            nameElement.value = '';  
+            textElement.value = '';  
+        })
+        .catch(err => {
+            console.error("Ошибка при отправке комментария:", err);
+    })
+  })
 }
 
 export function initReplyCommentListeners() {
@@ -99,13 +82,13 @@ function likeHandler(event) {
     const comment = comments[index];
     if (!comment) return;
     
-    comment.liked = !comment.liked;
-    comment.likesCount += comment.liked ? 1 : -1;
+    comment.isLiked = !comment.isLiked;
+    comment.likes += comment.isLiked ? 1 : -1;
     
-    event.target.classList.toggle('-active-like', comment.liked);
+    event.target.classList.toggle('-active-like', comment.isLiked);
     const likesCounter = event.target.parentElement.querySelector('.likes-counter');
     if (likesCounter) {
-      likesCounter.textContent = comment.likesCount;
+      likesCounter.textContent = comment.likes;
     }
   }
 }

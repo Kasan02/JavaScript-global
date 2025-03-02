@@ -18,34 +18,52 @@ export function initAddCommentListener() {
     textElement.classList.remove('error');
 
     if (!name) {
-        nameElement.classList.add('error');
-        nameElement.placeholder = "Вы не ввели имя!";
-        return;
+      nameElement.classList.add('error');
+      nameElement.placeholder = "Вы не ввели имя!";
+      return;
     }
     if (!text) {
-        textElement.classList.add('error');
-        textElement.placeholder = "Вы не ввели комментарий!";
-        return;
+      textElement.classList.add('error');
+      textElement.placeholder = "Вы не ввели комментарий!";
+      return;
+    }
+
+    if (name.length < 3 || text.length < 3) {
+      alert("Имя и комментарий должны быть не короче 3-х символов");
+      nameElement.classList.add('err');
+      textElement.classList.add('err');
+
+      setTimeout(() => {
+        nameElement.classList.remove('err');
+        textElement.classList.remove('err');
+      }, 2000);
+      return;
     }
 
     document.querySelector('.form-loading').style.display = 'block';
     document.querySelector('.add-form').style.display = 'none';
 
     postComment(escapeHtml(text), escapeHtml(name))
-        .then((data) => {
-          document.querySelector('.form-loading').style.display = 'none';
-          document.querySelector('.add-form').style.display = 'flex';
-
-          updateComments(data);
-            renderComments();
-            nameElement.value = '';  
-            textElement.value = '';  
-        })
-        .catch(err => {
-            console.error("Ошибка при отправке комментария:", err);
-    })
-  })
+      .then((data) => {
+        updateComments(data);
+        renderComments();
+        nameElement.value = '';  
+        textElement.value = '';  
+      })
+      .catch(error => {
+        if (error.message === "Failed to fetch") {
+          alert("Нет интернета, проверьте соединение.");
+        } else if (error.message === "Ошибка сервера") {
+          alert("Ошибка сервера.");
+        }
+      })
+      .finally(() => {
+        document.querySelector('.form-loading').style.display = 'none';
+        document.querySelector('.add-form').style.display = 'flex';
+      });
+  });
 }
+
 
 export function initReplyCommentListeners() {
   const commentElements = document.querySelectorAll('.comment');

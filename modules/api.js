@@ -33,11 +33,10 @@ export const postComment = (text, name) => {
         if (!response.ok) {
             return response.json().then(err => Promise.reject(err));
         }
-        return fetchComments(); 
+        return response.json();  
     })
     .catch(error => {
         console.error("Ошибка при отправке комментария:", error);
+        return Promise.reject(error);
     });
 };
-
-

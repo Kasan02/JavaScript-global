@@ -3,6 +3,7 @@ import { escapeHtml } from './escapeHtml.js';
 import { renderComments } from './renderComments.js';
 import { updateComments } from "./comments.js";
 import { postComment } from "./api.js";
+import { fetchComments } from "./api.js";
 
 export function initAddCommentListener() {
   const button = document.querySelector('.add-form-button');
@@ -28,8 +29,17 @@ export function initAddCommentListener() {
         return;
     }
 
+    document.querySelector('.form-loading').style.display = 'block';
+    document.querySelector('.add-form').style.display = 'none';
+
     postComment(escapeHtml(text), escapeHtml(name))
+    .then(() => {
+      return fetchComments();
+    })
         .then((data) => {
+          document.querySelector('.form-loading').style.display = 'none';
+          document.querySelector('.add-form').style.display = 'flex';
+
           updateComments(data);
             renderComments();
             nameElement.value = '';  

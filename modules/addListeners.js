@@ -44,6 +44,9 @@ export function initAddCommentListener() {
     document.querySelector('.add-form').style.display = 'none';
 
     postComment(escapeHtml(text), escapeHtml(name))
+    .then(() => {
+      return fetchComments();
+    })
       .then((data) => {
         updateComments(data);
         renderComments();

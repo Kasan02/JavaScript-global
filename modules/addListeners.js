@@ -3,6 +3,7 @@ import { escapeHtml } from './escapeHtml.js';
 import { renderComments } from './renderComments.js';
 import { updateComments } from "./comments.js";
 import { postComment } from "./api.js";
+import { fetchComments } from "./api.js";
 
 export function initAddCommentListener() {
   const button = document.querySelector('.add-form-button');

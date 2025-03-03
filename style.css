@@ -150,3 +150,7 @@ body {
   display:none;
   margin-top: 20px
 }
+
+.err {
+  border: 2px solid red;
+}

@@ -29,45 +29,49 @@ export function initAddCommentListener() {
       return;
     }
 
-    if (name.length < 3 || text.length < 3) {
-      alert("Имя и комментарий должны быть не короче 3-х символов");
-      nameElement.classList.add('err');
-      textElement.classList.add('err');
-
-      setTimeout(() => {
-        nameElement.classList.remove('err');
-        textElement.classList.remove('err');
-      }, 2000);
-      return;
-    }
-
-    document.querySelector('.form-loading').style.display = 'block';
-    document.querySelector('.add-form').style.display = 'none';
+    let loaderTimeout = setTimeout(() => {
+      document.querySelector('.form-loading').style.display = 'block';
+      document.querySelector('.add-form').style.display = 'none';
+    }, 300);
 
     postComment(escapeHtml(text), escapeHtml(name))
-    .then(() => {
-      return fetchComments();
-    })
+      .then(() => {
+        return fetchComments();
+      })
       .then((data) => {
+        clearTimeout(loaderTimeout);
         updateComments(data);
         renderComments();
         nameElement.value = '';  
         textElement.value = '';  
+
+        nameElement.placeholder = "Введите имя";
+        textElement.placeholder = "Введите комментарий";
+        document.querySelector('.form-loading').style.display = 'none';
+        document.querySelector('.add-form').style.display = 'block';
       })
       .catch(error => {
+        clearTimeout(loaderTimeout);
+        document.querySelector('.form-loading').style.display = 'none';
+        document.querySelector('.add-form').style.display = 'flex';
+
         if (error.message === "Failed to fetch") {
           alert("Нет интернета, проверьте соединение.");
         } else if (error.message === "Ошибка сервера") {
           alert("Ошибка сервера.");
+        } else if (error.message === "Некорректные данные") {
+          alert("Имя и комментарий должны быть не короче 3-х символов");
+          nameElement.classList.add('err');
+          textElement.classList.add('err');
+
+          setTimeout(() => {
+            nameElement.classList.remove('err');
+            textElement.classList.remove('err');
+          }, 2000);
         }
-      })
-      .finally(() => {
-        document.querySelector('.form-loading').style.display = 'none';
-        document.querySelector('.add-form').style.display = 'flex';
       });
   });
 }
-
 
 export function initReplyCommentListeners() {
   const commentElements = document.querySelectorAll('.comment');

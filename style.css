@@ -118,6 +118,8 @@ body {
   }
 
   .add-form-text {
+    min-width: 510px;
+    max-width: 510px;
     margin-top: 12px;
     padding: 22px;
     resize: none;
@@ -149,4 +151,8 @@ body {
 .form-loading {
   display:none;
   margin-top: 20px
+}
+
+.err {
+  border: 2px solid red;
 }

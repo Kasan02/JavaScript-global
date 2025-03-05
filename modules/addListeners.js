@@ -19,36 +19,58 @@ export function initAddCommentListener() {
     textElement.classList.remove('error');
 
     if (!name) {
-        nameElement.classList.add('error');
-        nameElement.placeholder = "Вы не ввели имя!";
-        return;
+      nameElement.classList.add('error');
+      nameElement.placeholder = "Вы не ввели имя!";
+      return;
     }
     if (!text) {
-        textElement.classList.add('error');
-        textElement.placeholder = "Вы не ввели комментарий!";
-        return;
+      textElement.classList.add('error');
+      textElement.placeholder = "Вы не ввели комментарий!";
+      return;
     }
 
-    document.querySelector('.form-loading').style.display = 'block';
-    document.querySelector('.add-form').style.display = 'none';
+    let loaderTimeout = setTimeout(() => {
+      document.querySelector('.form-loading').style.display = 'block';
+      document.querySelector('.add-form').style.display = 'none';
+    }, 300);
 
     postComment(escapeHtml(text), escapeHtml(name))
-    .then(() => {
-      return fetchComments();
-    })
-        .then((data) => {
-          document.querySelector('.form-loading').style.display = 'none';
-          document.querySelector('.add-form').style.display = 'flex';
+      .then(() => {
+        return fetchComments();
+      })
+      .then((data) => {
+        clearTimeout(loaderTimeout);
+        updateComments(data);
+        renderComments();
+        nameElement.value = '';  
+        textElement.value = '';  
 
-          updateComments(data);
-            renderComments();
-            nameElement.value = '';  
-            textElement.value = '';  
-        })
-        .catch(err => {
-            console.error("Ошибка при отправке комментария:", err);
-    })
-  })
+        nameElement.placeholder = "Введите имя";
+        textElement.placeholder = "Введите комментарий";
+        document.querySelector('.form-loading').style.display = 'none';
+        document.querySelector('.add-form').style.display = 'block';
+      })
+      .catch(error => {
+        clearTimeout(loaderTimeout);
+        document.querySelector('.form-loading').style.display = 'none';
+        document.querySelector('.add-form').style.display = 'flex';
+
+        if (error.message === "Failed to fetch") {
+          alert("Нет интернета, проверьте соединение.");
+        } else if (error.message === "Ошибка сервера") {
+          alert("Ошибка сервера.");
+        } else if (error.message === "Некорректные данные") {
+          alert("Имя и комментарий должны быть не короче 3-х символов");
+          nameElement.classList.add('err');
+          textElement.classList.add('err');
+
+          setTimeout(() => {
+            nameElement.classList.remove('err');
+            textElement.classList.remove('err');
+          }, 2000);
+        }
+      });
+  });
 }
 
 export function initReplyCommentListeners() {

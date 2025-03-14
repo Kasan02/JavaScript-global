@@ -1,10 +1,10 @@
 import { comments } from "./comments.js";
-// import { initLikesListeners, initReplyCommentListeners } from "./addListeners.js";
+import { initLikesListeners, initReplyCommentListeners, initAddCommentListener } from "./addListeners.js";
 import { renderLogin } from "./renderLogin.js";
-
+import { token, name } from "./api.js";
 export function renderComments() {
   const container = document.querySelector('.container'); 
-  if (!container) return; // Проверяем, что контейнер существует
+  if (!container) return;
 
   const commentsHtml = comments.map((comment, index) => {
     const formattedDate = new Date(comment.date).toLocaleString('ru-RU', {
@@ -37,44 +37,14 @@ export function renderComments() {
   .join('');
 
   const addCommentsHtml = `
-  <ul class="comments">
-            <li class="comment">
-                <div class="comment-header">
-                    <div>Глеб Фокин</div>
-                    <div>12.02.22 12:18</div>
-                </div>
-                <div class="comment-body">
-                    <div class="comment-text">
-                        Это будет первый комментарий на этой странице
-                    </div>
-                </div>
-                <div class="comment-footer">
-                    <div class="likes">
-                        <span class="likes-counter">3</span>
-                        <button class="like-button"></button>
-                    </div>
-                </div>
-            </li>
-            <li class="comment">
-                <div class="comment-header">
-                    <div>Варвара Н.</div>
-                    <div>13.02.22 19:22</div>
-                </div>
-                <div class="comment-body">
-                    <div class="comment-text">
-                        Мне нравится как оформлена эта страница! ❤
-                    </div>
-                </div>
-                <div class="comment-footer">
-                    <div class="likes">
-                        <span class="likes-counter">75</span>
-                        <button class="like-button -active-like"></button>
-                    </div>
-                </div>
-            </li>
-        </ul>
         <div class="add-form">
-            <input type="text" id="name" class="add-form-name" placeholder="Введите ваше имя" />
+            <input 
+              type="text" 
+              id="name" 
+              class="add-form-name" 
+              placeholder="Введите ваше имя" 
+              readonly
+              value="${name}"/>
             <textarea type="textarea" id="text" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"></textarea>
             <div class="add-form-row">
                 <button id="button" class="add-form-button">Написать</button>
@@ -89,16 +59,18 @@ export function renderComments() {
 
   const baseHtml = `
   <ul class="comments">${commentsHtml}</ul>
-  ${linkToLoginText}`
+  ${token ? addCommentsHtml: linkToLoginText}`
 
   container.innerHTML = baseHtml; 
 
-  // initLikesListeners();
-  // initReplyCommentListeners();
-  // initAddCommentListener();
-
-  document.querySelector('.link-login').addEventListener('click', 
-    () => {
-      renderLogin();
-    })
+  if (token) {
+    initLikesListeners();
+    initReplyCommentListeners();
+    initAddCommentListener();
+  } else {
+    document.querySelector('.link-login').addEventListener('click', 
+      () => {
+        renderLogin();
+      })
   }
+}

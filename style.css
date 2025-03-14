@@ -113,7 +113,7 @@ body {
   }
 
   .add-form-name {
-    width: 510px;
+    width: 512px;
     padding: 11px 22px;
   }
 
@@ -167,7 +167,7 @@ body {
     font-family: Helvetica;
     border-radius: 8px;
     border: none;
-    width: 513px;
+    width: 512px;
     padding: 11px 22px;
     margin-bottom: 10px;
 }
@@ -177,7 +177,7 @@ body {
   font-family: Helvetica;
   border-radius: 8px;
   border: none;
-  width: 513px;
+  width: 512px;
   padding: 11px 22px;
 }
 
@@ -189,12 +189,14 @@ body {
     margin-top: 24px;
     font-size: 24px;
     padding: 10px 20px;
-    width: 543px;
+    width: 556px;
 }
 .add-form-reg {
   display: flex;
   flex-direction: column;
   border: none;
+  margin: 0px;
+  padding: 0px;
 }
 
 .add-form-button-link {
@@ -209,8 +211,6 @@ body {
 }
 
 .add-form-container {
-  padding: 20px;
-  margin-top: 48px;
   display: flex;
   flex-direction: column;
 }
@@ -220,3 +220,6 @@ body {
   justify-content: center;
 }
 
+.margin {
+  margin-bottom: 10px;
+}

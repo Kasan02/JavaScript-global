@@ -1,10 +1,16 @@
 const host = "https://wedev-api.sky.pro/api/v2/daniil-kasanov";
 const autHost = "https://wedev-api.sky.pro/api/user";
 
-let token = "";
+export let token = "";
 
 export const setToken = (newToken) => {
     token = newToken;
+}
+
+export let name = "";
+
+export const setName = (newName) => {
+    name = newName;
 }
 
 export const fetchComments = () => {
@@ -32,7 +38,7 @@ export const postComment = (text, name) => {
     return fetch(host + "/comments", {
         method: "POST",
         headers: {
-            Autorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
             text,

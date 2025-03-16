@@ -1,13 +1,12 @@
 import { comments } from "./comments.js";
-import { initLikesListeners, initReplyCommentListeners } from "./addListeners.js";
-
+import { initLikesListeners, initReplyCommentListeners, initAddCommentListener } from "./addListeners.js";
+import { renderLogin } from "./renderLogin.js";
+import { token, name } from "./api.js";
 export function renderComments() {
-  const ulEl = document.querySelector('.comments');
-  if (!ulEl) return;
-  
-  ulEl.innerHTML = '';
+  const container = document.querySelector('.container'); 
+  if (!container) return;
 
-  comments.forEach((comment, index) => {
+  const commentsHtml = comments.map((comment, index) => {
     const formattedDate = new Date(comment.date).toLocaleString('ru-RU', {
       day: '2-digit',
       month: '2-digit',
@@ -17,29 +16,61 @@ export function renderComments() {
       second: '2-digit'
     });
 
-    const commentElement = document.createElement('li');
-    commentElement.className = 'comment';
-    commentElement.dataset.index = index;
-    commentElement.innerHTML = `
-      <div class="comment-header">
-        <div>${comment.name}</div>
-        <div>${formattedDate}</div>
-      </div>
-      <div class="comment-body">
-        <div class="comment-text">
-          ${comment.text}
+    return `
+      <li class="comment" data-index="${index}">
+        <div class="comment-header">
+          <div>${comment.name}</div>
+          <div>${formattedDate}</div>
         </div>
-      </div>
-      <div class="comment-footer">
-        <div class="likes">
-          <span class="likes-counter">${comment.likes}</span>
-          <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}"></button>
+        <div class="comment-body">
+          <div class="comment-text">${comment.text}</div>
         </div>
-      </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter">${comment.likes}</span>
+            <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}"></button>
+          </div>
+        </div>
+      </li>
     `;
-    ulEl.appendChild(commentElement);
-  });
+  })
+  .join('');
 
-  initLikesListeners();
-  initReplyCommentListeners();
+  const addCommentsHtml = `
+        <div class="add-form">
+            <input 
+              type="text" 
+              id="name" 
+              class="add-form-name" 
+              placeholder="Введите ваше имя" 
+              readonly
+              value="${name}"/>
+            <textarea type="textarea" id="text" class="add-form-text" placeholder="Введите ваш коментарий" rows="4"></textarea>
+            <div class="add-form-row">
+                <button id="button" class="add-form-button">Написать</button>
+            </div>
+        </div>
+        <div class="form-loading">
+            Комментарий добавляется...
+        </div>
+  `
+
+  const linkToLoginText = `<p>Чтобы отправить комментарий, <span class="link-login">войдите</span></p>`
+
+  const baseHtml = `
+  <ul class="comments">${commentsHtml}</ul>
+  ${token ? addCommentsHtml: linkToLoginText}`
+
+  container.innerHTML = baseHtml; 
+
+  if (token) {
+    initLikesListeners();
+    initReplyCommentListeners();
+    initAddCommentListener();
+  } else {
+    document.querySelector('.link-login').addEventListener('click', 
+      () => {
+        renderLogin();
+      })
+  }
 }

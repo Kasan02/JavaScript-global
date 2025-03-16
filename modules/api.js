@@ -59,9 +59,6 @@ export const postComment = (text, name) => {
             return response.json();
         }
     })
-    .then(() => {
-        return fetchComments();
-    })
 };
 
 export const login = (login, password) => {

@@ -113,7 +113,7 @@ body {
   }
 
   .add-form-name {
-    width: 300px;
+    width: 512px;
     padding: 11px 22px;
   }
 
@@ -155,4 +155,71 @@ body {
 
 .err {
   border: 2px solid red;
+}
+
+.link-login {
+  border-bottom: #ffffff solid 1px;
+  cursor: pointer;
+}
+
+.add-form-name-login {
+    font-size: 16px;
+    font-family: Helvetica;
+    border-radius: 8px;
+    border: none;
+    width: 512px;
+    padding: 11px 22px;
+    margin-bottom: 10px;
+}
+
+.add-form-name-password {
+  font-size: 16px;
+  font-family: Helvetica;
+  border-radius: 8px;
+  border: none;
+  width: 512px;
+  padding: 11px 22px;
+}
+
+.add-form-button-reg {
+    background-color: #bcec30;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    margin-top: 24px;
+    font-size: 24px;
+    padding: 10px 20px;
+    width: 556px;
+}
+.add-form-reg {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.add-form-button-link {
+  margin-top: 24px;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: flex;
+  justify-content: center;
+}
+
+.add-form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-reg {
+  display: flex;
+  justify-content: center;
+}
+
+.margin {
+  margin-bottom: 10px;
 }
